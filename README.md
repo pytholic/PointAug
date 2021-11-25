@@ -17,6 +17,6 @@ For now, I have decided to include some `basic` augmentations like:
 If I come up with more ideas, I will try to include them in the `tool`.
 
 ## App Interface
-The `app` is built using the **`Tkinter`** module in python. In the simplest form, we can create some `frame` and `canvas`, attach some `buttons` to it, and then assign some `commands` or `actions` to those buttons via `functions`.
+The app is built using the **Tkinter module** in python. In the simplest form, we can create some `frame` and `canvas`, attach some `buttons` to it, and then assign some `commands` or `actions` to those buttons via `functions`.
 
 This [tutorial](https://www.youtube.com/watch?v=jE-SpRI3K5g) from **Dev Ed** really helped me to get started with it.
