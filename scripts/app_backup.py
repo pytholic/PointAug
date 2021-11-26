@@ -1,4 +1,4 @@
-import tkinter as tk   # python3
+import tkinter as tk
 from utils import *
 import os
 from tkinter import filedialog
@@ -7,19 +7,19 @@ from tkinter import filedialog
 TITLE_FONT = ('Calibri', 18, 'bold')
 
 
-# Utility functions
+# --------------Utility functions---------------------
 
 # Rotation augmentation function and buttons
-def augment_rotate_angle(data):
+def augment_rotate_angle(data, case='Y'):
 	for obj in data:
 		rotation_augmentation_angle(obj)
 
 
-def augment_rotate_random(data):
+def augment_rotate_random(data, case='Y'):
 	for obj in data:
 		rotation_augmentation_random(obj)
 
-def augment_jitter(data):
+def augment_jitter(data, sigma=0.01, clip=0.05):
 	for obj in data:
 		jitter_augmentation(obj)
 
@@ -43,8 +43,15 @@ def show_files(frame, _list):
 		label = tk.Label(frame, text=obj, bg='gray')
 		label.pack()
 
+def del_mesh(frame):
+	for widget in frame.winfo_children():
+		if isinstance(widget, tk.Label):
+			widget.destroy()
 
-# App code
+	obj_files.clear()
+
+# ------------------App code-------------------------
+
 class SampleApp(tk.Tk):
 
 	def __init__(self, *args, **kwargs):
@@ -79,6 +86,8 @@ class SampleApp(tk.Tk):
 		frame.tkraise()
 
 
+# Starting Page
+
 class StartPage(tk.Frame):
 
 	def __init__(self, parent, controller):
@@ -96,19 +105,34 @@ class StartPage(tk.Frame):
 		label_start.pack(side="top", fill="x", pady=10)
 
 		# Open file button
-		open_file = tk.Button(self.frame_start, text='Open File', padx=10, 
+		open_file = tk.Button(self.frame_start, text='Open File', padx=10, width = 15,
 					pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
-					command=lambda: [add_mesh(self.frame_start), show_files(self.frame_start, obj_files)]) # have to use lambda
+					command=lambda: [add_mesh(self.frame_start), show_files(self.frame_start, obj_files)])
 		
 		open_file.pack(side=tk.BOTTOM)
+		#open_file.place(x=100, y=530) # Can also use relx and rely
+		#open_file.pack(side=tk.BOTTOM)
+
+
+		# Delete file button
+		delete_file = tk.Button(self.frame_start, text='Delete Files', padx=10, width = 15,
+					pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
+					command=lambda: del_mesh(self.frame_start))
+		
+		delete_file.pack(side=tk.BOTTOM)
+		#delete_file.place(x=205, y=530)
+
 
 		# Augmentation button
-		augment_button = tk.Button(self.frame_start, text='Augmentation', padx=10, 
+		augment_button = tk.Button(self.frame_start, text='Augmentation', padx=10, width = 15,
 						pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
 						command=lambda: controller.show_frame("PageAug"))
 		
 		augment_button.pack(side=tk.BOTTOM)
 
+
+
+# Augmentation Page
 
 class PageAug(tk.Frame):
 
@@ -127,14 +151,15 @@ class PageAug(tk.Frame):
 	
 
 		# Show Files
-		show_files = tk.Button(self.frame_aug, text='Show Files', padx=10, 
+		show_files = tk.Button(self.frame_aug, text='Show Files', padx=10, width = 15,
 					pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
 					command=lambda: controller.show_frame("StartPage"))
 		
+		#show_files.place(x=200, y=530)
 		show_files.pack(side=tk.BOTTOM)
 
 		# Rotation Augmentation
-		rotation_augmentation = tk.Button(self.frame_aug, text='Rotation', padx=10, 
+		rotation_augmentation = tk.Button(self.frame_aug, text='Rotation', padx=10, width = 15,
 					pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
 					command=lambda: controller.show_frame("PageRotAug"))
 		
@@ -142,13 +167,16 @@ class PageAug(tk.Frame):
 		#rotation_augmentation.pack(side=tk.LEFT)
 
 		# Jitter Augmentation
-		jitter_augmentation = tk.Button(self.frame_aug, text='Jitter', padx=10, 
+		jitter_augmentation = tk.Button(self.frame_aug, text='Jitter', padx=10, width = 15,
 						pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
-						command=lambda: augment_jitter(obj_files))
+						command=lambda: augment_jitter(obj_files, sigma=0.01, clip=0.05))
 		
-		jitter_augmentation.place(x=120, y=70)
+		jitter_augmentation.place(x=160, y=70)
 		#jitter_augmentation.pack(side=tk.LEFT)
 
+
+
+# Rotation Augmentation Page
 
 class PageRotAug(tk.Frame):
 
@@ -166,20 +194,69 @@ class PageRotAug(tk.Frame):
 		label_aug = tk.Label(self.frame_rot, text="Choose augmentation type", font=TITLE_FONT, borderwidth=2)
 		label_aug.pack(side="top", fill="x", pady=10)
 
-		# Angle rotation Augmentation
-		angle_rotation = tk.Button(self.frame_rot, text='Angle Rotation', padx=10, 
-					pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
-					command=lambda: augment_rotate_angle(obj_files))
 		
-		angle_rotation.pack(side=tk.BOTTOM)
+		# Show Files
+		show_files = tk.Button(self.frame_rot, text='Show Files', padx=10, width = 15,
+					pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
+					command=lambda: controller.show_frame("StartPage"))
+		
+		show_files.pack(side=tk.BOTTOM)
+		#show_files.place(x=200, y=530)
+
+		
+		# Angle rotation Augmentation
+		angle_rotation = tk.Button(self.frame_rot, text='Angle Rotation', padx=10, width = 15,
+					pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
+					command=lambda: augment_rotate_angle(obj_files, 'Y'))
+		
+		angle_rotation.place(x=20, y=70)
+		#angle_rotation.pack(side=tk.BOTTOM)
 
 		# Random Rotation Augmentation
-		random_rotation = tk.Button(self.frame_rot, text='Random Rotation', padx=10, 
+		random_rotation = tk.Button(self.frame_rot, text='Random Rotation', padx=10, width = 15,
 						pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
-						command=lambda: augment_rotate_random(obj_files))
+						command=lambda: augment_rotate_random(obj_files, 'Y'))
 		
-		random_rotation.pack(side=tk.BOTTOM)
+		random_rotation.place(x=160, y=70)
+		#random_rotation.pack(side=tk.BOTTOM)
 
+
+
+# User Inputs for Rotation Augmentation
+
+# class PageRotInputs(tk.Frame):
+
+# 	def __init__(self, parent, controller):
+# 		tk.Frame.__init__(self, parent)
+		
+# 		self.controller = controller
+
+# 		self.canvas = tk.Canvas(self, height=700, width=700, bg='#263D42')
+# 		self.canvas.pack(fill="both", expand=True)
+
+# 		self.frame_rot_inputs = tk.Frame(self, bg='white')
+# 		self.frame_rot_inputs.place(relwidth=0.8, relheight=0.8, relx=0.1, rely=0.1)
+
+# 		label_aug = tk.Label(self.frame_rot_inputs, text="Input the dersired parameters", font=TITLE_FONT, borderwidth=2)
+# 		label_aug.pack(side="top", fill="x", pady=10)
+
+		# # Angle rotation Augmentation
+		# angle_rotation = tk.Button(self.frame_rot, text='Angle Rotation', padx=10, 
+		# 			pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
+		# 			command=lambda: augment_rotate_angle(obj_files, 'Y'))
+		
+		# angle_rotation.pack(side=tk.BOTTOM)
+
+		# # Random Rotation Augmentation
+		# random_rotation = tk.Button(self.frame_rot, text='Random Rotation', padx=10, 
+		# 				pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
+		# 				command=lambda: augment_rotate_random(obj_files, 'Y'))
+		
+		# random_rotation.pack(side=tk.BOTTOM)
+
+
+
+# Run
 
 if __name__ == "__main__":
 	app = SampleApp()

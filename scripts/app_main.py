@@ -72,10 +72,12 @@ class SampleApp(tk.Tk):
 		self.frames["StartPage"] = StartPage(parent=container, controller=self)
 		self.frames["PageAug"] = PageAug(parent=container, controller=self)
 		self.frames["PageRotAug"] = PageRotAug(parent=container, controller=self)
+		self.frames["PageRotInputs"] = PageRotInputs(parent=container, controller=self)
 
 		self.frames["StartPage"].grid(row=0, column=0, sticky="nsew")
 		self.frames["PageAug"].grid(row=0, column=0, sticky="nsew")
 		self.frames["PageRotAug"].grid(row=0, column=0, sticky="nsew")
+		self.frames["PageRotInputs"].grid(row=0, column=0, sticky="nsew")
 
 		self.show_frame("StartPage")
 
@@ -207,7 +209,8 @@ class PageRotAug(tk.Frame):
 		# Angle rotation Augmentation
 		angle_rotation = tk.Button(self.frame_rot, text='Angle Rotation', padx=10, width = 15,
 					pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
-					command=lambda: augment_rotate_angle(obj_files, 'Y'))
+					command= lambda: controller.show_frame("PageRotInputs"))
+					#command=lambda: augment_rotate_angle(obj_files, 'Y'))
 		
 		angle_rotation.place(x=20, y=70)
 		#angle_rotation.pack(side=tk.BOTTOM)
@@ -224,21 +227,21 @@ class PageRotAug(tk.Frame):
 
 # User Inputs for Rotation Augmentation
 
-# class PageRotInputs(tk.Frame):
+class PageRotInputs(tk.Frame):
 
-# 	def __init__(self, parent, controller):
-# 		tk.Frame.__init__(self, parent)
+	def __init__(self, parent, controller):
+		tk.Frame.__init__(self, parent)
 		
-# 		self.controller = controller
+		self.controller = controller
 
-# 		self.canvas = tk.Canvas(self, height=700, width=700, bg='#263D42')
-# 		self.canvas.pack(fill="both", expand=True)
+		self.canvas = tk.Canvas(self, height=700, width=700, bg='#263D42')
+		self.canvas.pack(fill="both", expand=True)
 
-# 		self.frame_rot_inputs = tk.Frame(self, bg='white')
-# 		self.frame_rot_inputs.place(relwidth=0.8, relheight=0.8, relx=0.1, rely=0.1)
+		self.frame_rot_inputs = tk.Frame(self, bg='white')
+		self.frame_rot_inputs.place(relwidth=0.8, relheight=0.8, relx=0.1, rely=0.1)
 
-# 		label_aug = tk.Label(self.frame_rot_inputs, text="Input the dersired parameters", font=TITLE_FONT, borderwidth=2)
-# 		label_aug.pack(side="top", fill="x", pady=10)
+		label_aug = tk.Label(self.frame_rot_inputs, text="Input the dersired parameters", font=TITLE_FONT, borderwidth=2)
+		label_aug.pack(side="top", fill="x", pady=10)
 
 		# # Angle rotation Augmentation
 		# angle_rotation = tk.Button(self.frame_rot, text='Angle Rotation', padx=10, 
