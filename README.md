@@ -13,6 +13,8 @@ For now, I have decided to include some `basic` augmentations like:
 * Sampling
 * Interpolation
 * Jitter
+* Deformation
+* Morphology
 
 If I come up with more ideas, I will try to include them in the `tool`.
 

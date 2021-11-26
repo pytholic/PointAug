@@ -199,7 +199,7 @@ def plot_3d(data):
 	
 	'''
 	Input:
-		list of poitn clouds
+		list of point clouds
 	
 	'''
 
@@ -209,9 +209,46 @@ def plot_3d(data):
 	o3d.visualization.draw_geometries(data)
 
 
+# Utility functions for the main app
+
+def rotation_augmentation_angle(path, case='Y', angle=180):
+
+	mesh = load_mesh(path)
+	xyz = mesh_to_array(mesh)
+	pcd = array_to_pcd(xyz)
+	
+	rotate = RotatePointCloud(xyz)
+
+	xyz_rot_angle = rotate.rotate_point_cloud_angle(case=case, angle=angle)
+	pcd_rot_angle = array_to_pcd(xyz_rot_angle)
+
+	plot_3d([pcd, pcd_rot_angle])
 
 
+def rotation_augmentation_random(path, case='Y'):
 
+	mesh = load_mesh(path)
+	xyz = mesh_to_array(mesh)
+	pcd = array_to_pcd(xyz)
+	
+	rotate = RotatePointCloud(xyz)
+
+	xyz_rot_angle = rotate.rotate_point_cloud_random(case=case)
+	pcd_rot_angle = array_to_pcd(xyz_rot_angle)
+
+	plot_3d([pcd, pcd_rot_angle])
+
+
+def jitter_augmentation(path, sigma=0.01, clip=0.05):
+
+	mesh = load_mesh(path)
+	xyz = mesh_to_array(mesh)
+	pcd = array_to_pcd(xyz)
+
+	xyz_jitter = jitter_point_cloud(xyz, sigma=sigma, clip=clip)
+	pcd_jitter= array_to_pcd(xyz_jitter)
+
+	plot_3d([pcd, pcd_jitter])
 
 #def translate_point_cloud(data):
 
