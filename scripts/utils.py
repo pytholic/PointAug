@@ -31,7 +31,7 @@ class RotatePointCloud:
 	def __init__(self, data):
 		self.data = data
 
-	def rotate_point_cloud_angle(self, axis: str, angle: int=90):
+	def rotate_point_cloud_angle(self, axis: str, num_sample: int=1, angle: int=90):
 
 		''' 
 	    
@@ -88,7 +88,7 @@ class RotatePointCloud:
 		return rotated_data
 
 
-	def rotate_point_cloud_random(self, axis: str):
+	def rotate_point_cloud_random(self, axis: str, num_sample: int=1):
 
 		''' 
 	    
@@ -146,10 +146,10 @@ class RotatePointCloud:
 
 
 
-def jitter_point_cloud(data, sigma=0.01, clip=0.05):
+def jitter_point_cloud(data, num_sample: int=1, sigma=0.01, clip=0.05):
     
     ''' 
-    Randomly jitter points. jittering is per point.
+    Randomly jitter points i.e. adding noise. jittering is per point.
     Input:
     	Nx3 array, original point clouds
     Return:
@@ -211,7 +211,7 @@ def plot_3d(data):
 
 # Utility functions for the main app
 
-def rotation_augmentation_angle(path, axis='Y', angle=180):
+def rotation_augmentation_angle(path, num_sample, axis='Y', angle=180):
 
 	mesh = load_mesh(path)
 	xyz = mesh_to_array(mesh)
@@ -219,13 +219,14 @@ def rotation_augmentation_angle(path, axis='Y', angle=180):
 	
 	rotate = RotatePointCloud(xyz)
 
-	xyz_rot_angle = rotate.rotate_point_cloud_angle(axis=axis, angle=angle)
-	pcd_rot_angle = array_to_pcd(xyz_rot_angle)
+	for i in range(0, num_sample):
+		xyz_rot_angle = rotate.rotate_point_cloud_angle(axis=axis, angle=angle)
+		pcd_rot_angle = array_to_pcd(xyz_rot_angle)
 
-	plot_3d([pcd, pcd_rot_angle])
+		plot_3d([pcd, pcd_rot_angle])
 
 
-def rotation_augmentation_random(path, axis='Y'):
+def rotation_augmentation_random(path, num_sample, axis='Y'):
 
 	mesh = load_mesh(path)
 	xyz = mesh_to_array(mesh)
@@ -233,22 +234,24 @@ def rotation_augmentation_random(path, axis='Y'):
 	
 	rotate = RotatePointCloud(xyz)
 
-	xyz_rot_angle = rotate.rotate_point_cloud_random(axis=axis)
-	pcd_rot_angle = array_to_pcd(xyz_rot_angle)
+	for i in range(0, num_sample):
+		xyz_rot_angle = rotate.rotate_point_cloud_random(axis=axis)
+		pcd_rot_angle = array_to_pcd(xyz_rot_angle)
 
-	plot_3d([pcd, pcd_rot_angle])
+		plot_3d([pcd, pcd_rot_angle])
 
 
-def jitter_augmentation(path, sigma=0.01, clip=0.05):
+def jitter_augmentation(path, num_sample, sigma=0.01, clip=0.05):
 
 	mesh = load_mesh(path)
 	xyz = mesh_to_array(mesh)
 	pcd = array_to_pcd(xyz)
 
-	xyz_jitter = jitter_point_cloud(xyz, sigma=sigma, clip=clip)
-	pcd_jitter= array_to_pcd(xyz_jitter)
+	for i in range(0, num_sample):
+		xyz_jitter = jitter_point_cloud(xyz, sigma=sigma, clip=clip)
+		pcd_jitter= array_to_pcd(xyz_jitter)
 
-	plot_3d([pcd, pcd_jitter])
+		plot_3d([pcd, pcd_jitter])
 
 #def translate_point_cloud(data):
 

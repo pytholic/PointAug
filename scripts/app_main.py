@@ -11,21 +11,26 @@ INPUT_LABEL_FONT = ('Ubuntu', 12, 'bold')
 ### UTILITY FUNCTIONS ###
 
 # Rotation augmentation function and buttons
-def augment_rotate_angle(data, axis='Y', angle=180):
+def augment_rotate_angle(data, num_sample, axis='Y', angle=180):
 	angle = angle.get() # Converting from tkinter IntVar to int
 	axis = axis.get() # Converting from tkinter StringVar to str
+	num_sample = num_sample.get()
 	for obj in data:
-		rotation_augmentation_angle(obj, axis, angle)
+		rotation_augmentation_angle(obj, num_sample, axis, angle)
 
 
-def augment_rotate_random(data, axis='Y'):
+def augment_rotate_random(data, num_sample, axis='Y'):
 	axis = axis.get()
+	num_sample = num_sample.get()
 	for obj in data:
-		rotation_augmentation_random(obj, axis)
+		rotation_augmentation_random(obj, num_sample=num_sample, axis=axis)
 
-def augment_jitter(data, sigma=0.01, clip=0.05):
+def augment_jitter(data, num_sample, sigma=0.01, clip=0.05):
+	sigma = float(sigma.get())
+	clip = float(clip.get())
+	num_sample = num_sample.get()
 	for obj in data:
-		jitter_augmentation(obj)
+		jitter_augmentation(obj, num_sample=num_sample, sigma=sigma, clip=clip)
 
 
 # Storing and deleting file nams	
@@ -300,7 +305,7 @@ class PageAngleRotInputs(tk.Frame):
 		# Augment Button
 		self.augment = tk.Button(self.frame, text='Augment', padx=10, width = 15,
 					pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
-					command=lambda: augment_rotate_angle(obj_files, axis=self.axis, angle=self.angle))
+					command=lambda: augment_rotate_angle(obj_files, num_sample=self.num, axis=self.axis, angle=self.angle))
 		
 		self.augment.pack(side=tk.BOTTOM)
 
@@ -361,7 +366,7 @@ class PageRandomRotInputs(tk.Frame):
 		# Augment Button
 		self.augment = tk.Button(self.frame, text='Augment', padx=10, width = 15,
 					pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
-					command=lambda: augment_rotate_random(obj_files, axis=self.axis))
+					command=lambda: augment_rotate_random(obj_files, num_sample=self.num, axis=self.axis))
 
 		self.augment.pack(side=tk.BOTTOM)
 
@@ -389,25 +394,35 @@ class PageJitterInputs(tk.Frame):
 		
 		### User Input ###
 
+		# Number of augmentations
+		self.num = tk.IntVar()
+		self.num.set(1)
+		tk.Entry(self.frame, textvariable=self.num, 
+				bg='#E5E4E2', justify='center').place(x=270, y=70, width=100, height=25)
+
+		self.num_label = tk.Label(self.frame, text="Number:", 
+							font=INPUT_LABEL_FONT, bg='white', borderwidth=2)
+		self.num_label.place(x=155, y=72)
+
 		# Sigma Value
 		self.sigma = tk.StringVar()
 		self.sigma.set('0.01')
 		tk.Entry(self.frame, textvariable=self.sigma, 
-				bg='#E5E4E2', justify='center').place(x=270, y=70, width=100, height=25)
+				bg='#E5E4E2', justify='center').place(x=270, y=100, width=100, height=25)
 
 		self.sigma_label = tk.Label(self.frame, text="Sigma:", 
 							font=INPUT_LABEL_FONT, bg='white', borderwidth=2)
-		self.sigma_label.place(x=160, y=72)
+		self.sigma_label.place(x=165, y=102)
 
 		# Clip Value
 		self.clip = tk.StringVar()
 		self.clip.set('0.05')
 		tk.Entry(self.frame, textvariable=self.clip, 
-				bg='#E5E4E2', justify='center').place(x=270, y=100, width=100, height=25)
+				bg='#E5E4E2', justify='center').place(x=270, y=130, width=100, height=25)
 
 		self.clip_label = tk.Label(self.frame, text="Clip:", 
 							font=INPUT_LABEL_FONT, bg='white', borderwidth=2)
-		self.clip_label.place(x=180, y=102)
+		self.clip_label.place(x=175, y=132)
 
 		
 		### Actions ###
@@ -422,7 +437,7 @@ class PageJitterInputs(tk.Frame):
 		# Augment Button
 		self.augment = tk.Button(self.frame, text='Augment', padx=10, width = 15,
 					pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
-					command=lambda: augment_jitter(obj_files, sigma=self.sigma, clip=self.clip))
+					command=lambda: augment_jitter(obj_files, num_sample=self.num, sigma=self.sigma, clip=self.clip))
 
 		self.augment.pack(side=tk.BOTTOM)
 
