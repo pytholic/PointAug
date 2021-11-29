@@ -31,7 +31,7 @@ class RotatePointCloud:
 	def __init__(self, data):
 		self.data = data
 
-	def rotate_point_cloud_angle(self, case: str, angle: int=90):
+	def rotate_point_cloud_angle(self, axis: str, angle: int=90):
 
 		''' 
 	    
@@ -67,19 +67,19 @@ class RotatePointCloud:
 			[-sin_theta, cos_theta, 0],
 			[0, 0, 1]])
 
-		if case == 'X':
+		if axis == 'X':
 			rotated_data = np.dot(self.data.reshape((-1, 3)), Rx)
-		elif case == 'Y':
+		elif axis == 'Y':
 			rotated_data = np.dot(self.data.reshape((-1, 3)), Ry)
-		elif case == 'Z':
+		elif axis == 'Z':
 			rotated_data = np.dot(self.data.reshape((-1, 3)), Rz)
-		elif case == 'XY':
+		elif axis == 'XY':
 			R = np.dot(Ry, Rx)
 			rotated_data = np.dot(self.data.reshape((-1, 3)), R)
-		elif case == 'XZ':
+		elif axis == 'XZ':
 			R = np.dot(Ry, Rx)
 			rotated_data = np.dot(self.data.reshape((-1, 3)), R)
-		elif case == 'YZ':
+		elif axis == 'YZ':
 			R = np.dot(Ry, Rx)
 			rotated_data = np.dot(self.data.reshape((-1, 3)), R)
 		else:
@@ -88,7 +88,7 @@ class RotatePointCloud:
 		return rotated_data
 
 
-	def rotate_point_cloud_random(self, case: str):
+	def rotate_point_cloud_random(self, axis: str):
 
 		''' 
 	    
@@ -124,19 +124,19 @@ class RotatePointCloud:
 			[-sin_theta, cos_theta, 0],
 			[0, 0, 1]])
 
-		if case == 'X':
+		if axis == 'X':
 			rotated_data = np.dot(self.data.reshape((-1, 3)), Rx)
-		elif case == 'Y':
+		elif axis == 'Y':
 			rotated_data = np.dot(self.data.reshape((-1, 3)), Ry)
-		elif case == 'Z':
+		elif axis == 'Z':
 			rotated_data = np.dot(self.data.reshape((-1, 3)), Rz)
-		elif case == 'XY':
+		elif axis == 'XY':
 			R = np.dot(Ry, Rx)
 			rotated_data = np.dot(self.data.reshape((-1, 3)), R)
-		elif case == 'XZ':
+		elif axis == 'XZ':
 			R = np.dot(Ry, Rx)
 			rotated_data = np.dot(self.data.reshape((-1, 3)), R)
-		elif case == 'YZ':
+		elif axis == 'YZ':
 			R = np.dot(Ry, Rx)
 			rotated_data = np.dot(self.data.reshape((-1, 3)), R)
 		else:
@@ -211,7 +211,7 @@ def plot_3d(data):
 
 # Utility functions for the main app
 
-def rotation_augmentation_angle(path, case='Y', angle=180):
+def rotation_augmentation_angle(path, axis='Y', angle=180):
 
 	mesh = load_mesh(path)
 	xyz = mesh_to_array(mesh)
@@ -219,13 +219,13 @@ def rotation_augmentation_angle(path, case='Y', angle=180):
 	
 	rotate = RotatePointCloud(xyz)
 
-	xyz_rot_angle = rotate.rotate_point_cloud_angle(case=case, angle=angle)
+	xyz_rot_angle = rotate.rotate_point_cloud_angle(axis=axis, angle=angle)
 	pcd_rot_angle = array_to_pcd(xyz_rot_angle)
 
 	plot_3d([pcd, pcd_rot_angle])
 
 
-def rotation_augmentation_random(path, case='Y'):
+def rotation_augmentation_random(path, axis='Y'):
 
 	mesh = load_mesh(path)
 	xyz = mesh_to_array(mesh)
@@ -233,7 +233,7 @@ def rotation_augmentation_random(path, case='Y'):
 	
 	rotate = RotatePointCloud(xyz)
 
-	xyz_rot_angle = rotate.rotate_point_cloud_random(case=case)
+	xyz_rot_angle = rotate.rotate_point_cloud_random(axis=axis)
 	pcd_rot_angle = array_to_pcd(xyz_rot_angle)
 
 	plot_3d([pcd, pcd_rot_angle])
@@ -275,8 +275,8 @@ if __name__ == '__main__':
 	
 	rotate = RotatePointCloud(xyz)
 
-	xyz_rot_angle = rotate.rotate_point_cloud_angle(case='Y', angle=180)
-	xyz_rot_random = rotate.rotate_point_cloud_random(case='XYZ')
+	xyz_rot_angle = rotate.rotate_point_cloud_angle(axis='Y', angle=180)
+	xyz_rot_random = rotate.rotate_point_cloud_random(axis='XYZ')
 	xyz_jittered_data = jitter_point_cloud(xyz)
 
 	pcd_rot_angle = o3d.geometry.PointCloud()
