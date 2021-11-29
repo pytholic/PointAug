@@ -6,7 +6,7 @@ from tkinter import filedialog
 
 TITLE_FONT = ('Ubuntu', 18, 'bold')
 INPUT_FONT = ('Ubuntu', 12, 'bold')
-INPUT_LABEL_FONT = ('Ubuntu', 11, 'bold')
+INPUT_LABEL_FONT = ('Ubuntu', 12, 'bold')
 
 ### UTILITY FUNCTIONS ###
 
@@ -243,15 +243,38 @@ class PageRotInputs(tk.Frame):
 							bg='#E5E4E2', font=TITLE_FONT, borderwidth=2)
 		label_aug.pack(side="top", fill="x", pady=10)
 
-		# Taking desired input from user
+		
+		### Taking desired input from user ###
+
+		# Input for angle augmentation
+
+		# Number of augmentations
 		self.num_angle_aug = tk.IntVar()
+		self.num_angle_aug.set(1)
 		tk.Entry(self.frame_rot_inputs, textvariable=self.num_angle_aug, 
 				bg='#E5E4E2', justify='center').place(x=270, y=70, width=100, height=25)
 
 		label_num_angle = tk.Label(self.frame_rot_inputs, text="Number:", 
 							font=INPUT_LABEL_FONT, bg='white', borderwidth=2)
-		label_num_angle.place(x=170, y=72)
+		label_num_angle.place(x=160, y=72)
 
+		# Input angle
+		self.angle = tk.IntVar()
+		self.angle.set(90)
+		tk.Entry(self.frame_rot_inputs, textvariable=self.angle, 
+				bg='#E5E4E2', justify='center').place(x=270, y=100, width=100, height=25)
+
+		label_angle = tk.Label(self.frame_rot_inputs, text="Angle:", 
+							font=INPUT_LABEL_FONT, bg='white', borderwidth=2)
+		label_angle.place(x=170, y=102)
+
+
+		# Show Files
+		show_files = tk.Button(self.frame_rot_inputs, text='Show Files', padx=10, width = 15,
+					pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
+					command=lambda: controller.show_frame("StartPage"))
+		
+		show_files.pack(side=tk.BOTTOM)
 
 		# # Angle rotation Augmentation
 		# angle_rotation = tk.Button(self.frame_rot, text='Angle Rotation', padx=10, 
