@@ -79,13 +79,14 @@ class SampleApp(tk.Tk):
 		self.frames["PageRotAug"] = PageRotAug(parent=container, controller=self)
 		self.frames["PageAngleRotInputs"] = PageAngleRotInputs(parent=container, controller=self)
 		self.frames["PageRandomRotInputs"] = PageRandomRotInputs(parent=container, controller=self)
-
+		self.frames["PageJitterInputs"] = PageJitterInputs(parent=container, controller=self)
 
 		self.frames["StartPage"].grid(row=0, column=0, sticky="nsew")
 		self.frames["PageAug"].grid(row=0, column=0, sticky="nsew")
 		self.frames["PageRotAug"].grid(row=0, column=0, sticky="nsew")
 		self.frames["PageAngleRotInputs"].grid(row=0, column=0, sticky="nsew")
 		self.frames["PageRandomRotInputs"].grid(row=0, column=0, sticky="nsew")
+		self.frames["PageJitterInputs"].grid(row=0, column=0, sticky="nsew")
 
 		self.show_frame("StartPage")
 
@@ -177,7 +178,8 @@ class PageAug(tk.Frame):
 		# Jitter Augmentation Button
 		jitter_augmentation = tk.Button(self.frame, text='Jitter', padx=10, width = 15,
 						pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
-						command=lambda: augment_jitter(obj_files, sigma=0.01, clip=0.05))
+						command=lambda: controller.show_frame('PageJitterInputs'))
+						#command=lambda: augment_jitter(obj_files, sigma=0.01, clip=0.05))
 		
 		jitter_augmentation.place(x=160, y=70)
 		#jitter_augmentation.pack(side=tk.LEFT)
@@ -364,6 +366,67 @@ class PageRandomRotInputs(tk.Frame):
 		self.augment.pack(side=tk.BOTTOM)
 
 
+# User Inputs for Jitter Augmentation
+
+class PageJitterInputs(tk.Frame):
+
+	def __init__(self, parent, controller):
+		tk.Frame.__init__(self, parent)
+		
+		self.controller = controller
+
+		self.canvas = tk.Canvas(self, height=700, width=700, bg='#263D42')
+		self.canvas.pack(fill="both", expand=True)
+		
+		# Frame for Random Rotation Aumentation
+		self.frame = tk.Frame(self, bg='white')
+		self.frame.place(relwidth=0.8, relheight=0.8, relx=0.1, rely=0.1)
+
+		self.label = tk.Label(self.frame, text="Input the dersired parameters", 
+							bg='#E5E4E2', font=TITLE_FONT, borderwidth=2)
+		self.label.pack(side="top", fill="x", pady=10)
+
+		
+		### User Input ###
+
+		# Sigma Value
+		self.sigma = tk.StringVar()
+		self.sigma.set('0.01')
+		tk.Entry(self.frame, textvariable=self.sigma, 
+				bg='#E5E4E2', justify='center').place(x=270, y=70, width=100, height=25)
+
+		self.sigma_label = tk.Label(self.frame, text="Sigma:", 
+							font=INPUT_LABEL_FONT, bg='white', borderwidth=2)
+		self.sigma_label.place(x=160, y=72)
+
+		# Clip Value
+		self.clip = tk.StringVar()
+		self.clip.set('0.05')
+		tk.Entry(self.frame, textvariable=self.clip, 
+				bg='#E5E4E2', justify='center').place(x=270, y=100, width=100, height=25)
+
+		self.clip_label = tk.Label(self.frame, text="Clip:", 
+							font=INPUT_LABEL_FONT, bg='white', borderwidth=2)
+		self.clip_label.place(x=180, y=102)
+
+		
+		### Actions ###
+
+		# Show Files Button
+		show_files = tk.Button(self.frame, text='Show Files', padx=10, width = 15,
+					pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
+					command=lambda: controller.show_frame("StartPage"))
+		
+		show_files.pack(side=tk.BOTTOM)
+
+		# Augment Button
+		self.augment = tk.Button(self.frame, text='Augment', padx=10, width = 15,
+					pady=5, fg='white', bg='#263D42', bd=3, relief='raised',
+					command=lambda: augment_jitter(obj_files, sigma=self.sigma, clip=self.clip))
+
+		self.augment.pack(side=tk.BOTTOM)
+
+	
 
 
 
