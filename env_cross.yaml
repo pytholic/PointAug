@@ -1,7 +1,0 @@
-name: PointAug
-channels:
-  - defaults
-dependencies:
-  - open3d
-  - cx_freeze
-prefix: /home/trojan/anaconda3/envs/PointAug
